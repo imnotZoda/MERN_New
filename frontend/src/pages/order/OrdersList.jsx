@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AdminSidebar from '../../layouts/AdminSidebar';
+import AdminSidebar from '../../layouts/AdminSideBar';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { baseUrl } from '../../assets/constant';
@@ -61,8 +61,8 @@ export default function OrdersList() {
                 label: 'Finished Orders',
                 data: filteredOrders.map(order => order.status.toLowerCase() === 'finished' ? 1 : 0),
                 fill: false,
-                backgroundColor: 'rgba(75, 192, 192, 1)',
-                borderColor: 'rgba(75, 192, 192, 0.6)',
+                backgroundColor: 'rgba(26, 43, 66, 1)',
+                borderColor: 'rgba(26, 43, 66, 0.6)',
                 tension: 0.1,
             },
         ],

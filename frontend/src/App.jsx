@@ -1,124 +1,114 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import AdminSidebar from './layouts/AdminSideBar'
+// Layouts
+import AdminSidebar from './layouts/AdminSideBar';
 
-import Home from './Home'
-
+// Pages
+import Home from './Home';
 import ProductList from './pages/product/ProductList';
 import ProductCreate from './pages/product/ProductCreate';
-
 import ProductUpdate from './pages/product/ProductUpdate';
 import Register from './pages/user/Register';
 import Login from './pages/user/Login';
-import { auth } from './utils/firebase';
 import Cart from './pages/Cart';
 import OrdersList from './pages/order/OrdersList';
 
-import { baseUrl, VAPID_KEY } from './assets/constant'
-import { getToken, onMessage } from 'firebase/messaging' //galing package
-import { messaging } from './utils/firebase'
-import { useSelector } from 'react-redux'
-import axios from 'axios'
+// Firebase and Notifications
+import { auth, messaging } from './utils/firebase';
+import { getToken, onMessage } from 'firebase/messaging';
 
-// import { getToken } from "firebase/messaging"
-// import { messaging } from './utils/firebase';
+// Redux
+import { useSelector } from 'react-redux';
+
+// Axios
+import axios from 'axios';
+
+// Constants
+import { baseUrl, VAPID_KEY } from './assets/constant';
 
 function App() {
-  const [user, setUser] = useState(null)
-  const { access_token } = useSelector(state => state.auth);
+  const [user, setUser] = useState(null);
+  const { access_token } = useSelector((state) => state.auth);
 
-  const sentTokenToServer = async ({ token }) => {
+  // Function to send the token to the server
+  const sendTokenToServer = async ({ token }) => {
     try {
-
-      const { data } = await axios.post(`${baseUrl}/user/token`, { token: token }, {
-        headers: {
-          "Authorization": `Bearer ${access_token}`
+      await axios.post(
+        `${baseUrl}/user/token`,
+        { token },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
         }
-      })
-
+      );
     } catch (err) {
-      console.log(err)
+      console.error('Error sending token to the server:', err);
     }
-  }
+  };
 
+  // Function to request notification permissions and generate token
   const requestPermission = async () => {
-
     const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      const token = await getToken(messaging, { vapidKey: VAPID_KEY });
 
-    if (permission === "granted") {
-      const token = await getToken(messaging, {
-        vapidKey: VAPID_KEY,
-      });
-
-      if (access_token) { // if mayaccess token pang notif na, saka palang ibibigay sa token server
-        sentTokenToServer({ token: token })
+      if (access_token) {
+        sendTokenToServer({ token });
       }
 
-      console.log("Token generated : ", token);
-
-    } else if (permission === "denied") {
-      alert("You denied for the notification");
+      console.log('Notification token generated:', token);
+    } else if (permission === 'denied') {
+      alert('You denied the notification permission.');
     }
-  }
+  };
 
+  // Firebase Auth State Listener
   useEffect(() => {
+    auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+  }, []);
 
-    auth.onAuthStateChanged((user) => {
-      setUser(user)
-    })
-
-  }, [])
-
+  // Firebase Messaging Listener
   useEffect(() => {
-
     requestPermission();
 
     const unsubscribe = onMessage(messaging, (payload) => {
-
-      console.log(payload)
-
+      console.log('Notification received:', payload);
     });
 
     return () => {
       unsubscribe();
     };
-
-  }, [access_token])
-
-
+  }, [access_token]);
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          {/* User Route */}
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={user ? <Navigate to="/products/list" /> : <Register />} />
+        <Route path="/login" element={user ? <Navigate to="/products/list" /> : <Login />} />
 
-          <Route path='/register' element={user ? <Navigate to={'/products/list'} /> : <Register />} />
-          <Route path='/login' element={user ? <Navigate to={'/products/list'} /> : <Login />} />
+        {/* Cart Route */}
+        <Route path="/cart" element={<Cart />} />
 
-          <Route path='/' element={<Home />} />
+        {/* Product CRUD Routes */}
+        <Route path="/products/list" element={<ProductList />} />
+        <Route path="/products/create" element={<ProductCreate />} />
+        <Route path="/products/update/:id" element={<ProductUpdate />} />
 
-          {/* <Route path='/cart' element={user ? <Cart /> : <Navigate to={'/login'} />} /> */}
-          <Route path='/cart' element={<Cart />} />
-
-
-          {/* product CRUD  */}
-          <Route path='/products/list' element={<ProductList />} />
-          <Route path='/products/create' element={<ProductCreate />} />
-          <Route path='/products/update/:id' element={<ProductUpdate />} />
-
-
-          {/* orders */}
-          <Route path='orders'
-            element={user ? <OrdersList /> : <Navigate to={'/login'} />}
-          />
-        </Routes>
-      </BrowserRouter>
-
-    </>
-  )
+        {/* Orders Route */}
+        <Route
+          path="/orders"
+          element={user ? <OrdersList /> : <Navigate to="/login" />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
