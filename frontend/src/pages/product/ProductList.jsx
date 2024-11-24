@@ -146,19 +146,18 @@ export default function ProductList() {
   }, [])
 
   const getProducts = async () => {
-
-    const { data } = await axios.get(BASE_URL);
+    const { data } = await axios.get(BASE_URL); // Without pagination limit
     setProducts(data.products);
-
-    //Fetching ng lahat ng category sa products
+  
+    // Fetching all categories from products
     const uniqueCategories = [
       "All",
       ...new Set(data.products.map((product) => product.category)),
     ];
-
+  
     setCategories(uniqueCategories);
-
-  }
+  };
+  
 
   // const bulkDelete = async (ids) => {
   //   try {

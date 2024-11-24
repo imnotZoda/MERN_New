@@ -53,7 +53,6 @@ export default function UserNavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -69,7 +68,7 @@ export default function UserNavBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            ThrillTix
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

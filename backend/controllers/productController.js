@@ -92,30 +92,63 @@ exports.getSingle = async (req, res, next) => {
 }
 
 exports.all = async (req, res, next) => {
-
     try {
+        const { priceRange, category, page = 1, limit = 0 } = req.query;
+        const filter = {};
 
-        const products = await Product.find()
-        // .populate({
-        //     path: 'category',
-        //     model: 'Category'
+        // Price Range Filter
+        if (priceRange) {
+            const priceRanges = priceRange.split(',');
+            const priceConditions = [];
 
-        // })
+            if (priceRanges.includes('100-5000')) {
+                priceConditions.push({ sell_price: { $gte: 100, $lte: 5000 } });
+            }
+            if (priceRanges.includes('5000-10000')) {
+                priceConditions.push({ sell_price: { $gte: 5000, $lte: 10000 } });
+            }
+            if (priceRanges.includes('10000-15000')) {
+                priceConditions.push({ sell_price: { $gte: 10000, $lte: 15000 } });
+            }
+            if (priceRanges.includes('15000-20000')) {
+                priceConditions.push({ sell_price: { $gte: 15000, $lte: 20000 } });
+            }
+
+            if (priceConditions.length > 0) {
+                filter.$or = priceConditions;
+            }
+        }
+
+        // Category Filter
+        if (category) {
+            const categories = category.split(',');
+            filter.category = { $in: categories };
+        }
+
+        const products = await Product.find(filter)
+            .skip((page - 1) * limit)
+            .limit(Number(limit));
+
+        const totalProducts = await Product.countDocuments(filter);
+
+
         res.json({
-            message: "Available Products",
-            products: products,
-        })
+            products,
+            currentPage: Number(page),
+            totalPages: Math.ceil(totalProducts / limit),
+        });
+        
     } catch (error) {
-
         console.log(error);
-
         return res.json({
             message: "Error",
             success: false,
-        })
-
+        });
     }
-}
+};
+
+
+
 
 exports.delete = async (req, res, next) => {
     try {
@@ -182,4 +215,6 @@ exports.bulkDelete = async (req, res, next) => {
       });
     }
   }
+  
+
   
