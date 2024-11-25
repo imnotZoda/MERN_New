@@ -1,8 +1,5 @@
-import React from 'react'
+import React from 'react';
 import {
-    MDBContainer,
-    MDBRow,
-    MDBCol,
     MDBCard,
     MDBCardBody,
     MDBCardImage,
@@ -10,13 +7,11 @@ import {
     MDBBtn,
     MDBRipple,
 } from "mdb-react-ui-kit";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addToCart } from '../state/cartSlice';
 
 export default function ProductCard({ product }) {
-
     const dispatch = useDispatch();
-    const { cartItems } = useSelector(state => state.cart)
 
     const addProductToCart = () => {
         dispatch(
@@ -24,73 +19,116 @@ export default function ProductCard({ product }) {
                 ...product,
                 quantity: 1,
             })
-        )
-    }
+        );
+    };
 
     return (
-        <MDBCard style={{ borderRadius: "15px", maxWidth: 300 }}>
+        <MDBCard
+            style={{
+                borderRadius: "20px",
+                boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                maxWidth: "300px",
+                backgroundColor: "#D4D8DD",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: "100%", // Ensure equal height for all cards
+            }}
+        >
+            {/* Image Section */}
             <MDBRipple
                 rippleColor="light"
                 rippleTag="div"
-                className="bg-image rounded hover-overlay"
+                className="bg-image hover-overlay"
             >
                 <MDBCardImage
                     src={product.images[0].url}
                     fluid
                     className="w-100"
                     style={{
-                        borderTopLeftRadius: "15px",
-                        borderTopRightRadius: "15px",
+                        borderTopLeftRadius: "20px",
+                        borderTopRightRadius: "20px",
                         height: "200px",
-                        minWidth: "300px",
                         objectFit: 'cover',
                     }}
                 />
                 <a href="#!">
-                    <div className="mask"></div>
+                    <div
+                        className="mask"
+                        style={{
+                            background: "rgba(0, 0, 0, 0.1)",
+                            borderTopLeftRadius: "20px",
+                            borderTopRightRadius: "20px",
+                        }}
+                    ></div>
                 </a>
             </MDBRipple>
-            <MDBCardBody className="pb-0">
-                <div className="d-flex justify-content-between">
+
+            {/* Card Body */}
+            <MDBCardBody style={{ padding: "15px", flexGrow: 1 }}>
+                <div className="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <p>
-                            <a href="#!" className="text-dark">
-                                {product.name}
-                            </a>
+                        <h6 className="mb-1" style={{ fontWeight: "bold", color: "#1A2D42" }}>
+                            {product.name}
+                        </h6>
+                        <p
+                            className="small text-muted mb-0"
+                            style={{ color: "#2E4156" }}
+                        >
+                            {product.category}
                         </p>
-                        {/* Display the category directly */}
-                        <p className="small text-muted">{product.category}</p>
                     </div>
-                    <div>
-                        <div className="d-flex flex-row justify-content-end mt-1 mb-4 text-danger">
-                            <MDBIcon fas icon="star" />
-                            <MDBIcon fas icon="star" />
-                            <MDBIcon fas icon="star" />
-                            <MDBIcon fas icon="star" />
-                        </div>
-                        <p className="small text-muted">Rated 4.0/5</p>
+                    <div className="text-danger">
+                        <MDBIcon fas icon="star" />
+                        <MDBIcon fas icon="star" />
+                        <MDBIcon fas icon="star" />
+                        <MDBIcon fas icon="star" />
+                        <p className="small text-muted mb-0">4.0/5</p>
                     </div>
                 </div>
-            </MDBCardBody>
-            <hr className="my-0" />
-            <MDBCardBody className="pb-0">
-                <div className="d-flex justify-content-between">
-                    <p>
-                        <a href="#!" className="text-dark">
-                            PHP{product.sell_price}
-                        </a>
+
+                <hr style={{ borderTop: "1px solid #AAB7B7" }} />
+
+                {/* Price and Stock */}
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <p
+                        className="mb-0"
+                        style={{ fontWeight: "bold", color: "#1A2D42" }}
+                    >
+                        PHP {product.sell_price}
                     </p>
-                    <p className="text-dark"> Stocks: {product.stock_quantity} </p>
+                    <p
+                        className="small text-muted mb-0"
+                        style={{ color: "#2E4156" }}
+                    >
+                        Stocks: {product.stock_quantity}
+                    </p>
                 </div>
             </MDBCardBody>
-            <hr className="my-0" />
-            <MDBCardBody className="pb-0">
-                <div className="d-flex justify-content-between align-items-center pb-2 mb-4">
-                    <MDBBtn color="primary" style={{ width: '100%' }} onClick={addProductToCart}>
-                        Buy now
-                    </MDBBtn>
-                </div>
-            </MDBCardBody>
+
+            <hr style={{ borderTop: "1px solid #AAB7B7", margin: 0 }} />
+
+            {/* Buy Button */}
+            <div
+                className="d-flex justify-content-center"
+                style={{
+                    padding: "15px",
+                }}
+            >
+                <MDBBtn
+                    color="primary"
+                    style={{
+                        borderRadius: "15px",
+                        backgroundColor: "#1A2D42",
+                        border: "none",
+                        width: "100%",
+                        fontWeight: "bold",
+                    }}
+                    onClick={addProductToCart}
+                >
+                    Buy Now
+                </MDBBtn>
+            </div>
         </MDBCard>
-    )
+    );
 }

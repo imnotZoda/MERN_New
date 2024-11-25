@@ -13,7 +13,6 @@ export default function ProductListing() {
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
 
-    // Handle price filter change
     const handlePriceFilterChange = (event) => {
         const { value, checked } = event.target;
         setSelectedPriceRanges((prev) => {
@@ -25,15 +24,10 @@ export default function ProductListing() {
         });
     };
 
-    // Handle category filter change
     const handleCategoryFilterChange = (event) => {
         const { value, checked } = event.target;
         setSelectedCategories((prev) => {
-            if (checked) {
-                return [...prev, value];
-            } else {
-                return prev.filter((category) => category !== value);
-            }
+            return checked ? [...prev, value] : prev.filter((category) => category !== value);
         });
     };
 
@@ -48,12 +42,7 @@ export default function ProductListing() {
             const categoryParam = selectedCategories.join(',');
 
             const { data } = await axios.get(`${baseUrl}/product/all`, {
-                params: {
-                    priceRange: priceRangeParam,
-                    category: categoryParam,
-                    page,
-                    limit: 10,
-                },
+                params: { priceRange: priceRangeParam, category: categoryParam, page, limit: 10 },
             });
 
             setProducts((prev) => [...prev, ...data.products]);
@@ -65,7 +54,11 @@ export default function ProductListing() {
             }
 
             setHasMore(true); 
-        } catch (err) {
+        //     if (page >= data.totalPages) setCurrentPage(1);
+        //     else setCurrentPage((prevPage) => prevPage + 1);
+
+        //     setHasMore(true);
+        // } catch (err) {
             console.log(err);
         } finally {
             setIsLoading(false);
@@ -73,7 +66,6 @@ export default function ProductListing() {
     };
 
     useEffect(() => {
-
         setCurrentPage(1);
         setProducts([]);
         fetchProducts(1);
@@ -91,114 +83,102 @@ export default function ProductListing() {
         };
 
         window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
+        return () => window.removeEventListener('scroll', handleScroll);
     }, [currentPage, isLoading]);
 
     return (
-        <MDBContainer fluid className="my-5">
+        <MDBContainer
+            fluid
+            className="my-5 p-5"
+            style={{
+                backgroundColor: '#D4D8DD',
+                borderRadius: '15px',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+            }}
+        >
+            {/* Header */}
+            <h1
+                className="text-center mb-4"
+                style={{
+                    fontWeight: 'bold',
+                    fontSize: '2.5rem',
+                    color: '#1A2D42',
+                }}
+            >
+                Start Booking Your Tickets!
+            </h1>
+
+            {/* Filter Button */}
             <MDBRow className="mb-4">
-                <MDBCol md="12">
-                    <MDBBtn onClick={toggleFilter} color={isFilterEnabled ? 'danger' : 'success'}>
-                        {isFilterEnabled ? 'Disable Filter' : 'Enable Filter'}
+                <MDBCol md="12" className="text-center">
+                    <MDBBtn
+                        onClick={toggleFilter}
+                        color={isFilterEnabled ? 'danger' : 'primary'}
+                        className="rounded-pill px-4 py-2"
+                        style={{
+                            fontWeight: 'bold',
+                            backgroundColor: isFilterEnabled ? '#2E4156' : '#1A2D42',
+                            borderColor: 'transparent',
+                        }}
+                    >
+                        {isFilterEnabled ? 'Close Filter' : 'Filter'}
                     </MDBBtn>
                 </MDBCol>
             </MDBRow>
 
+            {/* Filters Section */}
             {isFilterEnabled && (
-                <MDBRow className="mb-4">
+                <MDBRow
+                    className="mb-4 p-4"
+                    style={{
+                        backgroundColor: '#AAB7B7',
+                        borderRadius: '10px',
+                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                    }}
+                >
                     <MDBCol md="6" className="mb-4">
-                        <h5>Filter by Price:</h5>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="100-5000"
-                                label="100 - 5000"
-                                onChange={handlePriceFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="5000-10000"
-                                label="5000 - 10000"
-                                onChange={handlePriceFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="10000-15000"
-                                label="10000 - 15000"
-                                onChange={handlePriceFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="15000-20000"
-                                label="15000 - 20000"
-                                onChange={handlePriceFilterChange}
-                            />
-                        </div>
+                        <h5 style={{ color: '#1A2D42' }}>Filter by Price:</h5>
+                        {['100-5000', '5000-10000', '10000-15000', '15000-20000'].map((range, idx) => (
+                            <div className="mb-2" key={idx}>
+                                <MDBCheckbox value={range} label={range} onChange={handlePriceFilterChange} />
+                            </div>
+                        ))}
                     </MDBCol>
-
                     <MDBCol md="6">
-                        <h5>Filter by Category:</h5>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="VIP Standing"
-                                label="VIP Standing"
-                                onChange={handleCategoryFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="Upper Box A"
-                                label="Upper Box A"
-                                onChange={handleCategoryFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="Upper Box B"
-                                label="Upper Box B"
-                                onChange={handleCategoryFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="Lower Box A"
-                                label="Lower Box A"
-                                onChange={handleCategoryFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="Lower Box B"
-                                label="Lower Box B"
-                                onChange={handleCategoryFilterChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <MDBCheckbox
-                                value="Gen Ad"
-                                label="Gen Ad"
-                                onChange={handleCategoryFilterChange}
-                            />
-                        </div>
+                        <h5 style={{ color: '#1A2D42' }}>Filter by Category:</h5>
+                        {['VIP Standing', 'Upper Box A', 'Upper Box B', 'Lower Box A', 'Lower Box B', 'Gen Ad'].map((category, idx) => (
+                            <div className="mb-2" key={idx}>
+                                <MDBCheckbox value={category} label={category} onChange={handleCategoryFilterChange} />
+                            </div>
+                        ))}
                     </MDBCol>
                 </MDBRow>
             )}
 
-            <MDBRow>
-                <MDBCol md="12">
-                    <div className="d-flex gap-4 flex-wrap justify-content-center">
-                        {products.map((product, index) => (
-                            <ProductCard key={`${product._id}-${index}`} product={product} />
-                        ))}
-                    </div>
-                    {isLoading && <p className="text-center mt-4">Loading...</p>}
-                </MDBCol>
-            </MDBRow>
+            {/* Product Cards */}
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                    gap: '15px', // Space between cards
+                    justifyContent: 'center',
+                    alignItems: 'start',
+                }}
+            >
+                {products.map((product, index) => (
+                    <ProductCard
+                        key={`${product._id}-${index}`}
+                        product={product}
+                        style={{
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
+                            borderRadius: '10px',
+                            overflow: 'hidden',
+                            backgroundColor: '#f8f9fa',
+                        }}
+                    />
+                ))}
+            </div>
+            {isLoading && <p className="text-center mt-4 text-secondary">Loading...</p>}
         </MDBContainer>
     );
 }

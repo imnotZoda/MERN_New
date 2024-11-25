@@ -55,9 +55,42 @@ export default function AdminSidebar({ children }) {
                     </div>
 
                     {/* Sidebar Menus */}
-                    <SubMenu label="Product">
-                        <MenuItem onClick={() => navigate("/products/list")}> List All</MenuItem>
-                        <MenuItem onClick={() => navigate("/products/create")}> Create New </MenuItem>
+                    <SubMenu
+                        label="Product"
+                        style={{
+                            backgroundColor: "#1A2D42", 
+                            borderRadius: "10px", 
+                            padding: "10px",
+                            marginBottom: "15px",
+                            color: "#FFFFFF"
+                        }}
+                    >
+                        <MenuItem
+                            onClick={() => navigate("/products/list")}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "10px",
+                                backgroundColor: "#1A2D42", // Dark blue for active menu item
+                                margin: "5px 0",
+                                color: "#FFFFFF", // White text for contrast
+                                fontWeight: "bold",
+                            }}
+                        >
+                            List All
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => navigate("/products/create")}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "10px",
+                                backgroundColor: "#1A2D42", // Dark blue for active menu item
+                                margin: "5px 0",
+                                color: "#FFFFFF", // White text for contrast
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Create New
+                        </MenuItem>
                     </SubMenu>
                     <MenuItem onClick={() => navigate("/orders")}> Orders </MenuItem>
                     <MenuItem onClick={logout}> Logout </MenuItem>
