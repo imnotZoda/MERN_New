@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AdminSidebar from '../../layouts/AdminSidebar';
+import AdminSidebar from '../../layouts/AdminSideBar';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { baseUrl } from '../../assets/constant';

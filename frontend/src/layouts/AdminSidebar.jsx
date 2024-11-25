@@ -15,14 +15,42 @@ export default function AdminSidebar({ children }) {
 
     return (
         <div style={{ display: 'flex', height: '100%', minHeight: '100vh' }}>
-            <Sidebar>
-                <Menu>
-                    {/* Add Logo */}
+            {/* Sidebar with enhanced styling */}
+            <Sidebar
+                style={{
+                    backgroundColor: '#1A2D42', // Sidebar background
+                    color: '#D4D8DD',          // Text color
+                    minWidth: '250px',
+                    boxShadow: '2px 0 10px rgba(0, 0, 0, 0.1)', // Subtle shadow for depth
+                    borderRadius: '10px',     // Rounded corners
+                }}
+            >
+                <Menu
+                    menuItemStyles={{
+                        button: ({ active }) => ({
+                            backgroundColor: active ? '#2E4156' : 'transparent', // Active state color
+                            color: '#000000',              // Active text color
+                            borderRadius: '8px',  // Smooth corners
+                            padding: '10px 20px',
+                            margin: '5px 0',
+                            transition: 'all 0.3s ease', // Smooth hover transition
+                        }),
+                        icon: {
+                            color: '#AAB7B7', // Icon color
+                        },
+                    }}
+                >
+                    {/* Logo Section */}
                     <div style={{ textAlign: 'center', margin: '20px 0' }}>
                         <img 
                             src={logo} 
                             alt="Logo" 
-                            style={{ maxWidth: '80%', height: 'auto' }} 
+                            style={{
+                                maxWidth: '80%',
+                                height: 'auto',
+                                borderRadius: '10px', // Slightly rounded logo
+                                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)', // Subtle shadow
+                            }} 
                         />
                     </div>
 
@@ -33,10 +61,16 @@ export default function AdminSidebar({ children }) {
                     </SubMenu>
                     <MenuItem onClick={() => navigate("/orders")}> Orders </MenuItem>
                     <MenuItem onClick={logout}> Logout </MenuItem>
-                    <MenuItem> Calendar </MenuItem>
                 </Menu>
             </Sidebar>
-            <main className='flex-grow-1' style={{ padding: 10, overflow: 'hidden' }}>
+            <main
+                className='flex-grow-1'
+                style={{
+                    padding: 10,
+                    overflow: 'hidden',
+                    backgroundColor: '#F5F7FA', // Light background for the main content
+                }}
+            >
                 {children}
             </main>
         </div>

@@ -17,7 +17,7 @@ export default function ProductListing() {
     const handlePriceFilterChange = (event) => {
         const { value, checked } = event.target;
         setSelectedPriceRanges((prev) => {
-            if (checked) {
+            if (checked) {``
                 return [...prev, value];
             } else {
                 return prev.filter((range) => range !== value);
@@ -37,7 +37,6 @@ export default function ProductListing() {
         });
     };
 
-    // Toggle the filter visibility
     const toggleFilter = () => {
         setIsFilterEnabled((prev) => !prev);
     };
@@ -59,14 +58,13 @@ export default function ProductListing() {
 
             setProducts((prev) => [...prev, ...data.products]);
 
-            // Reset page count if last page is reached
             if (page >= data.totalPages) {
-                setCurrentPage(1); // Reset to first page
+                setCurrentPage(1); 
             } else {
-                setCurrentPage((prevPage) => prevPage + 1); // Move to the next page
+                setCurrentPage((prevPage) => prevPage + 1); 
             }
 
-            setHasMore(true); // Always allow loading more products
+            setHasMore(true); 
         } catch (err) {
             console.log(err);
         } finally {
@@ -75,7 +73,7 @@ export default function ProductListing() {
     };
 
     useEffect(() => {
-        // Fetch products when filters change
+
         setCurrentPage(1);
         setProducts([]);
         fetchProducts(1);

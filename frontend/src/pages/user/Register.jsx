@@ -61,7 +61,7 @@ export default function Register() {
             formData.append('password', formik.values.password)
 
             const { data } = await axios.post(`${baseUrl}/user/register`, formData)
-            navigate ('/products/list')
+            navigate ('/')
 
         } catch (error) {
             console.log(error);

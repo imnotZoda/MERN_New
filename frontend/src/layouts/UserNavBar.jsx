@@ -16,6 +16,7 @@ import CartIcon from '@mui/icons-material/ShoppingBag'
 import { Badge } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Navigate, Route, useNavigate } from 'react-router-dom';
+import { auth } from '../utils/firebase';
 
 const pages = [
   { route: '/', label: 'Home' },
@@ -185,11 +186,23 @@ export default function UserNavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+              
+                {/* <MenuItem onClick={() => {
+                  handleCloseUserMenu()
+                  navigate('/profile')
+                }}>
+                  <Typography sx={{ textAlign: 'center' }}> Profile </Typography>
+                </MenuItem> */}
+
+
+                <MenuItem onClick={() => {
+                  handleCloseUserMenu()
+                  auth.signOut()
+                  navigate('/login')
+                }}>
+                  <Typography sx={{ textAlign: 'center' }}> Logout </Typography>
                 </MenuItem>
-              ))}
+              
             </Menu>
           </Box>
         </Toolbar>
