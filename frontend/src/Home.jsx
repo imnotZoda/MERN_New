@@ -21,15 +21,15 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Home() {
 
-  // Settings for the carousel
+
   const settings = {
-    dots: true,         // Show dots at the bottom of the carousel
-    infinite: true,     // Enable infinite scrolling
-    speed: 300,         // Transition speed
-    slidesToShow: 1,    // Show 1 slide at a time
-    slidesToScroll: 1,  // Scroll 1 slide at a time
-    autoplay: true,     // Enable autoplay
-    autoplaySpeed: 2000 // Autoplay speed (5 seconds)
+    dots: true,         
+    infinite: true,     
+    speed: 300,         
+    slidesToShow: 1,    
+    slidesToScroll: 1,  
+    autoplay: true,     
+    autoplaySpeed: 2000 
   };
 
   return (

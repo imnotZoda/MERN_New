@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
+import Landing from './pages/Landing';
 // Layouts
 import AdminSidebar from './layouts/AdminSideBar';
 
@@ -92,6 +92,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={user ? <Navigate to="/products/list" /> : <Register />} />
         <Route path="/login" element={user ? <Navigate to="/products/list" /> : <Login />} />
+        <Route path="/landing" element={<Landing />} />
+
 
         {/* Cart Route */}
         <Route path="/cart" element={<Cart />} />

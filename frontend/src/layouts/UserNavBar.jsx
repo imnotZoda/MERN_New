@@ -214,7 +214,7 @@ export default function UserNavBar() {
               onClose={handleCloseUserMenu}
             >
               
-                {/* <MenuItem onClick={() => {
+                {/* <MenuItem onClick={(  ) => {
                   handleCloseUserMenu()
                   navigate('/profile')
                 }}>
@@ -225,7 +225,7 @@ export default function UserNavBar() {
                 <MenuItem onClick={() => {
                   handleCloseUserMenu()
                   auth.signOut()
-                  navigate('/login')
+                  navigate('/landing')
                 }}>
                   <Typography sx={{ textAlign: 'center' }}> Logout </Typography>
                 </MenuItem>
